@@ -74,6 +74,13 @@ app.get('/registration', (req, res) => {
 app.post('/registration', ((req, res) => {
     const {name, phone, age, login, password} = req.body;
     const users = getUsers();
+
+    for (const user of users) {
+        if (user.login === login || user.phone === phone) {
+            res.render('registration', {logError: true});
+            return;
+        }
+    }
     users.push({id: users.length, name, phone, age, login, password});
 
     fs.writeFile(dbUsers, JSON.stringify(users), err => {
@@ -81,6 +88,6 @@ app.post('/registration', ((req, res) => {
             console.log(err);
             return;
         }
-        res.redirect('login');
     });
+    res.redirect('login');
 }));

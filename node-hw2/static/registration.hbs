@@ -32,5 +32,8 @@
         </label><br>
         <input type="submit" value="save">
     </form>
+    {{#if logError}}
+        <p>Login or phone already registered!</p>
+    {{/if}}
 </body>
 </html>
