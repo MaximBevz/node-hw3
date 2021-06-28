@@ -1,1 +1,0 @@
-[{"id":"0","name":"Max","login":"mixa","password":"myName1","age":22,"phone":"+380666466864"},{"id":1,"name":"1","phone":"1","age":"1","login":"1","password":"1"},{"id":2,"name":"2","phone":"2","age":"2","login":"2","password":"2"}]
