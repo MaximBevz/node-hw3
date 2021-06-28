@@ -14,8 +14,8 @@ module.exports = {
         res.json('success');
     },
 
-    getUserById: async (req, res) => {
-         await res.json(req.user);
+    getUserById: (req, res) => {
+         res.json(req.user);
     },
 
     deleteUserById: async (req, res) => {
