@@ -1,31 +1,34 @@
 const {
-    findAll, insertUser, getUserByID, removeUserByID, updateUserInfo
+    findAll, insertUser, removeUserByID, updateUserInfo
 } = require('../services');
 
 module.exports = {
     getAllUser: async (req, res) => {
         const allUsers = await findAll();
+
         res.json(allUsers);
     },
 
-    createUser: (req, res) => {
-        insertUser(req.body);
-
+    createUser: async (req, res) => {
+        await insertUser(req.body);
         res.json('success');
     },
 
-    getUserById: (req, res) => {
-        const { id } = req.params;
-        res.json(getUserByID(id));
+    getUserById: async (req, res) => {
+         await res.json(req.user);
     },
 
-    deleteUserById: (req, res) => {
+    deleteUserById: async (req, res) => {
         const { id } = req.params;
-        res.json(removeUserByID(id));
+        await removeUserByID(id);
+
+        res.json(`user id: ${id} deleted`);
     },
 
-    updateUserById: (req, res) => {
+    updateUserById: async (req, res) => {
         const { id } = req.params;
-        res.json(updateUserInfo(id, req.body));
+        await updateUserInfo(id, req.body);
+
+        res.json('User updated!');
     }
 };

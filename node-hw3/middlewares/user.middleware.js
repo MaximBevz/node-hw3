@@ -2,9 +2,9 @@ const { getUserByID } = require('../services');
 const { usersConst: { ERROR_PHRASES } } = require('../constants');
 
 module.exports = {
-    checkIsUserPresent: (req, res, next) => {
+    checkIsUserPresent: async (req, res, next) => {
         const { id } = req.params;
-        const singleUser = getUserByID(id);
+        const singleUser = await getUserByID(id);
         if (!singleUser) {
             throw new Error(ERROR_PHRASES.undefinedUser);
         }
@@ -22,7 +22,7 @@ module.exports = {
             throw new Error(ERROR_PHRASES.changeId);
         }
 
-        if (name === '' || password === '' || login === '') {
+        if (!name && !password && !login) {
             throw new Error(ERROR_PHRASES.emptyValue);
         }
 

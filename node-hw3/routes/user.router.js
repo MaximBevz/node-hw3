@@ -14,6 +14,6 @@ router.get('/:id', checkIsUserPresent, getUserById);
 
 router.delete('/:id', checkIsUserPresent, deleteUserById);
 
-router.patch('/:id', changeUserValidator, updateUserById);
+router.patch('/:id', checkIsUserPresent, changeUserValidator, updateUserById);
 
 module.exports = router;

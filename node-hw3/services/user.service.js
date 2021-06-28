@@ -1,35 +1,43 @@
 const fs = require('fs');
+const utils = require('util');
 const { usersConst: { USERS_DB_PATH } } = require('../constants');
 
-module.exports = {
-    findAll: () => JSON.parse(String(fs.readFileSync(USERS_DB_PATH))),
+const readFile = utils.promisify(fs.readFile);
+const writeFile = utils.promisify(fs.writeFile);
 
-    insertUser: (user) => {
-        const db = JSON.parse(String(fs.readFileSync(USERS_DB_PATH)));
+const getAllUsers = async () => {
+    const allUsers = await readFile(USERS_DB_PATH);
+    return JSON.parse(String(allUsers));
+};
+
+module.exports = {
+    findAll: () => getAllUsers(),
+
+    insertUser: async (user) => {
+        const db = await getAllUsers();
 
         db.push({ id: db.length, ...user });
 
-        fs.writeFile(USERS_DB_PATH, JSON.stringify(db), (err) => console.log(err));
+        await writeFile(USERS_DB_PATH, JSON.stringify(db));
     },
 
-    getUserByID: (id) => {
-        const db = JSON.parse(String(fs.readFileSync(USERS_DB_PATH)));
-        const singleUser = db.find((user) => String(user.id) === id);
-        return singleUser;
+    getUserByID: async (id) => {
+        const allUsers = await getAllUsers();
+        return allUsers.find((user) => String(user.id) === id);
     },
 
-    removeUserByID: (id) => {
-        const db = JSON.parse(String(fs.readFileSync(USERS_DB_PATH)));
-        const filterUser = db.filter((user) => String(user.id) !== id);
+    removeUserByID: async (id) => {
+        const allUsers = await getAllUsers();
+        const filterUser = allUsers.filter((user) => String(user.id) !== id);
 
-        fs.writeFile(USERS_DB_PATH, JSON.stringify(filterUser), (err) => console.log(err));
+        await writeFile(USERS_DB_PATH, JSON.stringify(filterUser));
         return filterUser;
     },
 
-    updateUserInfo: (id, info) => {
-        const db = JSON.parse(String(fs.readFileSync(USERS_DB_PATH)));
-        const userInfo = db.find((user) => String(user.id) === id);
-        db[id] = { ...userInfo, ...info };
-        fs.writeFile(USERS_DB_PATH, JSON.stringify(db), (err) => console.log(err));
+    updateUserInfo: async (id, info) => {
+        const allUsers = await getAllUsers();
+        const userInfo = allUsers.find((user) => String(user.id) === id);
+        allUsers[id] = { ...userInfo, ...info };
+        await writeFile(USERS_DB_PATH, JSON.stringify(allUsers));
     }
 };
